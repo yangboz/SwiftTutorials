@@ -37,6 +37,10 @@ class TipCalculatorModel {
     
 }
 
+let tipCalc = TipCalculatorModel(total: 21.19, taxPct: 0.06)
+tipCalc.returnPossibleTips()
+
+import Foundation
 // 1
 import UIKit
 // 2
@@ -76,3 +80,8 @@ class TestDataSource: NSObject, UITableViewDataSource {
     }
     
 }
+
+let testDataSource = TestDataSource()
+let tableView = UITableView(frame:CGRect(x: 0, y: 0, width: 320, height: 320), style:.Plain)
+tableView.dataSource = testDataSource
+tableView.reloadData()

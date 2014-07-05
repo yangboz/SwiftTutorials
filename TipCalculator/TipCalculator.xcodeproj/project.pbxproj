@@ -36,6 +36,7 @@
 		656AB11819679D7700CB8CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		656AB11919679D7700CB8CBB /* TipCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipCalculatorTests.swift; sourceTree = "<group>"; };
 		656AB12319679F6200CB8CBB /* TipCalculatorModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TipCalculatorModel.swift; sourceTree = "<group>"; };
+		656AB1251967B2AC00CB8CBB /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +80,7 @@
 			children = (
 				656AB10619679D7700CB8CBB /* AppDelegate.swift */,
 				656AB10819679D7700CB8CBB /* ViewController.swift */,
+				656AB1251967B2AC00CB8CBB /* MyPlayground.playground */,
 				656AB10A19679D7700CB8CBB /* Main.storyboard */,
 				656AB10D19679D7700CB8CBB /* Images.xcassets */,
 				656AB10419679D7700CB8CBB /* Supporting Files */,
