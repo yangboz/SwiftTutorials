@@ -18,6 +18,7 @@
 		650F274F196905C9007675E2 /* background-music-aac.caf in Resources */ = {isa = PBXBuildFile; fileRef = 650F274C196905C9007675E2 /* background-music-aac.caf */; };
 		650F2750196905C9007675E2 /* pew-pew-lei.caf in Resources */ = {isa = PBXBuildFile; fileRef = 650F274D196905C9007675E2 /* pew-pew-lei.caf */; };
 		650F2751196905C9007675E2 /* sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 650F274E196905C9007675E2 /* sprites.atlas */; };
+		650F275519691237007675E2 /* GameOverScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 650F275419691237007675E2 /* GameOverScene.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,8 @@
 		650F274C196905C9007675E2 /* background-music-aac.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "background-music-aac.caf"; sourceTree = "<group>"; };
 		650F274D196905C9007675E2 /* pew-pew-lei.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pew-pew-lei.caf"; sourceTree = "<group>"; };
 		650F274E196905C9007675E2 /* sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = sprites.atlas; sourceTree = "<group>"; };
+		650F275319691237007675E2 /* GameOverScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameOverScene.h; sourceTree = "<group>"; };
+		650F275419691237007675E2 /* GameOverScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameOverScene.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +105,8 @@
 				650F27321968F9D6007675E2 /* Main.storyboard */,
 				650F27351968F9D6007675E2 /* Images.xcassets */,
 				650F27231968F9D6007675E2 /* Supporting Files */,
+				650F275319691237007675E2 /* GameOverScene.h */,
+				650F275419691237007675E2 /* GameOverScene.m */,
 			);
 			path = SpriteKitSimpleGame;
 			sourceTree = "<group>";
@@ -244,6 +249,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				650F275519691237007675E2 /* GameOverScene.m in Sources */,
 				650F27311968F9D6007675E2 /* GameViewController.m in Sources */,
 				650F27291968F9D6007675E2 /* AppDelegate.m in Sources */,
 				650F272C1968F9D6007675E2 /* GameScene.m in Sources */,

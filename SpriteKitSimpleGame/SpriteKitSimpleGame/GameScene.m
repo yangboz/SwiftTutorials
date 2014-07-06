@@ -5,13 +5,16 @@
 //  Created by yangboz on 14-7-6.
 //  Copyright (c) 2014年 GODPAPER. All rights reserved.
 //
+//@see http://www.raywenderlich.com/42699/spritekit-tutorial-for-beginners
 
 #import "GameScene.h"
+#import "GameOverScene.h"
 
 @interface GameScene()<SKPhysicsContactDelegate>
 @property (nonatomic) SKSpriteNode * player;
 @property (nonatomic) NSTimeInterval lastSpawnTimeInterval;
 @property (nonatomic) NSTimeInterval lastUpdateTimeInterval;
+@property (nonatomic) int monstersDestroyed;
 @end
 
 @implementation GameScene
@@ -68,6 +71,13 @@ static const uint32_t monsterCategory        =  0x1 << 1;
     monster.physicsBody.categoryBitMask = monsterCategory;
     monster.physicsBody.contactTestBitMask = projectileCategory;
     monster.physicsBody.collisionBitMask = 0;
+    //
+    SKAction * loseAction = [SKAction runBlock:^{
+        SKTransition *reveal = [SKTransition flipHorizontalWithDuration:0.5];
+        SKScene * gameOverScene = [[GameOverScene alloc] initWithSize:self.size won:NO];
+        [self.view presentScene:gameOverScene transition: reveal];
+    }];
+    [monster runAction:[SKAction sequence:@[actionMove, loseAction, actionMoveDone]]];
 }
 //
 -(void)updateWithTimeSinceLastUpdate:(CFTimeInterval)timeSinceLast{
@@ -137,7 +147,13 @@ static const uint32_t monsterCategory        =  0x1 << 1;
 - (void)projectile:(SKSpriteNode *)projectile didCollideWithMonster:(SKSpriteNode *)monster {
     NSLog(@"Hit!!!");
     [projectile removeFromParent];
-    [monster removeFromParent];
+    [monster removeFromParent];//
+    self.monstersDestroyed++;
+    if (self.monstersDestroyed > 30) {
+        SKTransition *reveal = [SKTransition flipHorizontalWithDuration:0.5];
+        SKScene * gameOverScene = [[GameOverScene alloc] initWithSize:self.size won:YES];
+        [self.view presentScene:gameOverScene transition: reveal];
+    }
 }
 ///
 static inline CGPoint rwAdd(CGPoint a, CGPoint b) {
