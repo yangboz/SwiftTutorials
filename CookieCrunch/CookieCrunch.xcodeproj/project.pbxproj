@@ -30,6 +30,10 @@
 		65C75038196917A8009C7C02 /* Mining by Moonlight.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 65C75027196917A8009C7C02 /* Mining by Moonlight.mp3 */; };
 		65C75039196917A8009C7C02 /* Scrape.wav in Resources */ = {isa = PBXBuildFile; fileRef = 65C75028196917A8009C7C02 /* Scrape.wav */; };
 		65C7503A196917A8009C7C02 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 65C75029196917A8009C7C02 /* Sprites.atlas */; };
+		65C7503C19691AD5009C7C02 /* Cookie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7503B19691AD5009C7C02 /* Cookie.swift */; };
+		65C7503E19691D3F009C7C02 /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7503D19691D3F009C7C02 /* Array2D.swift */; };
+		65C7504019691EDF009C7C02 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7503F19691EDF009C7C02 /* Set.swift */; };
+		65C7504219691F43009C7C02 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7504119691F43009C7C02 /* Level.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +74,10 @@
 		65C75027196917A8009C7C02 /* Mining by Moonlight.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Mining by Moonlight.mp3"; sourceTree = "<group>"; };
 		65C75028196917A8009C7C02 /* Scrape.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Scrape.wav; sourceTree = "<group>"; };
 		65C75029196917A8009C7C02 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
+		65C7503B19691AD5009C7C02 /* Cookie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cookie.swift; sourceTree = "<group>"; };
+		65C7503D19691D3F009C7C02 /* Array2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
+		65C7503F19691EDF009C7C02 /* Set.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
+		65C7504119691F43009C7C02 /* Level.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +130,10 @@
 				65C74FFD1969170E009C7C02 /* Main.storyboard */,
 				65C750001969170E009C7C02 /* Images.xcassets */,
 				65C74FF31969170E009C7C02 /* Supporting Files */,
+				65C7503B19691AD5009C7C02 /* Cookie.swift */,
+				65C7503D19691D3F009C7C02 /* Array2D.swift */,
+				65C7503F19691EDF009C7C02 /* Set.swift */,
+				65C7504119691F43009C7C02 /* Level.swift */,
 			);
 			path = CookieCrunch;
 			sourceTree = "<group>";
@@ -304,8 +316,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				65C74FFA1969170E009C7C02 /* GameScene.swift in Sources */,
+				65C7504219691F43009C7C02 /* Level.swift in Sources */,
+				65C7503C19691AD5009C7C02 /* Cookie.swift in Sources */,
+				65C7504019691EDF009C7C02 /* Set.swift in Sources */,
 				65C74FFC1969170E009C7C02 /* GameViewController.swift in Sources */,
 				65C74FF61969170E009C7C02 /* AppDelegate.swift in Sources */,
+				65C7503E19691D3F009C7C02 /* Array2D.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
