@@ -59,7 +59,9 @@ class GameViewController: UIViewController {
                 self.view.userInteractionEnabled = true
             }
         } else {
-            view.userInteractionEnabled = true
+            scene.animateInvalidSwap(swap) {
+                self.view.userInteractionEnabled = true
+            }
         }
     }
 
