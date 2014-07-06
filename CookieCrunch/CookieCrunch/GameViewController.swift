@@ -1,109 +1,209 @@
+//
+//  GameViewController.swift
+//  CookieCrunch
+//
+//  Created by Matthijs on 19-06-14.
+//  Copyright (c) 2014 Razeware LLC. All rights reserved.
+//
+
 import UIKit
 import SpriteKit
+import AVFoundation
 
 class GameViewController: UIViewController {
-    var scene: GameScene!
-    var level: Level!
-    
-    var movesLeft: Int = 0
-    var score: Int = 0
-    
-    @IBOutlet var targetLabel: UILabel
-    @IBOutlet var movesLabel: UILabel
-    @IBOutlet var scoreLabel: UILabel
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return true
+  // The scene draws the tiles and cookie sprites, and handles swipes.
+  var scene: GameScene!
+
+  // The level contains the tiles, the cookies, and most of the gameplay logic.
+  // Needs to be ! because it's not set in init() but in viewDidLoad().
+  var level: Level!
+
+  var movesLeft: Int = 0
+  var score: Int = 0
+
+  @IBOutlet var targetLabel: UILabel
+  @IBOutlet var movesLabel: UILabel
+  @IBOutlet var scoreLabel: UILabel
+  @IBOutlet var gameOverPanel: UIImageView
+  @IBOutlet var shuffleButton: UIButton
+
+  var tapGestureRecognizer: UITapGestureRecognizer!
+  var backgroundMusic: AVAudioPlayer!
+
+  override func prefersStatusBarHidden() -> Bool {
+    return true
+  }
+
+  override func shouldAutorotate() -> Bool {
+    return true
+  }
+
+  override func supportedInterfaceOrientations() -> Int {
+    return Int(UIInterfaceOrientationMask.AllButUpsideDown.toRaw())
+  }
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    // Configure the view.
+    let skView = view as SKView
+    skView.multipleTouchEnabled = false
+
+    // Create and configure the scene.
+    scene = GameScene(size: skView.bounds.size)
+    scene.scaleMode = .AspectFill
+
+    // Load the level.
+    level = Level(filename: "Level_1")
+    scene.level = level
+    scene.addTiles()
+    scene.swipeHandler = handleSwipe
+
+    // Hide the game over panel from the screen.
+    gameOverPanel.hidden = true
+    shuffleButton.hidden = true
+
+    // Present the scene.
+    skView.presentScene(scene)
+
+    // Load and start background music.
+    let url = NSBundle.mainBundle().URLForResource("Mining by Moonlight", withExtension: "mp3")
+    backgroundMusic = AVAudioPlayer(contentsOfURL: url, error: nil)
+    backgroundMusic.numberOfLoops = -1
+    backgroundMusic.play()
+
+    // Let's start the game!
+    beginGame()
+  }
+
+  func beginGame() {
+    movesLeft = level.maximumMoves
+    score = 0
+    updateLabels()
+
+    level.resetComboMultiplier()
+
+    scene.animateBeginGame() {
+      self.shuffleButton.hidden = false
     }
-    
-    override func shouldAutorotate() -> Bool {
-        return true
+
+    shuffle()
+  }
+
+  func shuffle() {
+    // Delete the old cookie sprites, but not the tiles.
+    scene.removeAllCookieSprites()
+
+    // Fill up the level with new cookies, and create sprites for them.
+    let newCookies = level.shuffle()
+    scene.addSpritesForCookies(newCookies)
+  }
+
+  // This is the swipe handler. MyScene invokes this function whenever it
+  // detects that the player performs a swipe.
+  func handleSwipe(swap: Swap) {
+    // While cookies are being matched and new cookies fall down to fill up
+    // the holes, we don't want the player to tap on anything.
+    view.userInteractionEnabled = false
+
+    if level.isPossibleSwap(swap) {
+      level.performSwap(swap)
+      scene.animateSwap(swap, completion: handleMatches)
+    } else {
+      scene.animateInvalidSwap(swap) {
+        self.view.userInteractionEnabled = true
+      }
     }
-    
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.AllButUpsideDown.toRaw())
+  }
+
+  // This is the main loop that removes any matching cookies and fills up the
+  // holes with new cookies. While this happens, the user cannot interact with
+  // the app.
+  func handleMatches() {
+    // Detect if there are any matches left.
+    let chains = level.removeMatches()
+
+    // If there are no more matches, then the player gets to move again.
+    if chains.count == 0 {
+      beginNextTurn()
+      return
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Configure the view.
-        let skView = view as SKView
-        skView.multipleTouchEnabled = false
-        
-        // Create and configure the scene.
-        scene = GameScene(size: skView.bounds.size)
-        scene.scaleMode = .AspectFill
-        
-        // Present the scene.
-        skView.presentScene(scene)
-        //
-        level = Level(filename: "Level_1")
-        scene.level = level
-        //
-         scene.addTiles()
-        //
-        beginGame();
-        //
-        scene.swipeHandler = handleSwipe
-    }
-    
-    func beginGame() {
-        movesLeft = level.maximumMoves
-        score = 0
-        updateLabels()
-        //
-        level.resetComboMultiplier()
-        //
-        shuffle()
-    }
-    
-    func shuffle() {
-        let newCookies = level.shuffle()
-        scene.addSpritesForCookies(newCookies)
-    }
-    
-    func handleSwipe(swap: Swap) {
-        view.userInteractionEnabled = false
-        
-        if level.isPossibleSwap(swap) {
-            level.performSwap(swap)
-            scene.animateSwap(swap, completion: handleMatches)
-        } else {
-            scene.animateInvalidSwap(swap) {
-                self.view.userInteractionEnabled = true
-            }
+
+    // First, remove any matches...
+    scene.animateMatchedCookies(chains) {
+
+      // Add the new scores to the total.
+      for chain in chains {
+        self.score += chain.score
+      }
+      self.updateLabels()
+
+      // ...then shift down any cookies that have a hole below them...
+      let columns = self.level.fillHoles()
+      self.scene.animateFallingCookies(columns) {
+
+        // ...and finally, add new cookies at the top.
+        let columns = self.level.topUpCookies()
+        self.scene.animateNewCookies(columns) {
+
+          // Keep repeating this cycle until there are no more matches.
+          self.handleMatches()
         }
+      }
     }
-    func handleMatches() {
-        let chains = level.removeMatches()
-        if chains.count == 0 {
-            beginNextTurn()
-            return
-        }
-        scene.animateMatchedCookies(chains) {
-            for chain in chains {
-                self.score += chain.score
-            }
-            self.updateLabels()
-            let columns = self.level.fillHoles()
-            self.scene.animateFallingCookies(columns) {
-                let columns = self.level.topUpCookies()
-                self.scene.animateNewCookies(columns) {
-                    self.handleMatches()
-                }
-            }
-        }
+  }
+
+  func beginNextTurn() {
+    level.resetComboMultiplier()
+    level.detectPossibleSwaps()
+    view.userInteractionEnabled = true
+    decrementMoves()
+  }
+
+  func updateLabels() {
+    targetLabel.text = NSString(format: "%ld", level.targetScore)
+    movesLabel.text = NSString(format: "%ld", movesLeft)
+    scoreLabel.text = NSString(format: "%ld", score)
+  }
+
+  func decrementMoves() {
+    --movesLeft
+    updateLabels()
+
+    if score >= level.targetScore {
+      gameOverPanel.image = UIImage(named: "LevelComplete")
+      showGameOver()
+    } else if movesLeft == 0 {
+      gameOverPanel.image = UIImage(named: "GameOver")
+      showGameOver()
     }
-    
-    func beginNextTurn() {
-        level.detectPossibleSwaps()
-        view.userInteractionEnabled = true
+  }
+
+  func showGameOver() {
+    gameOverPanel.hidden = false
+    scene.userInteractionEnabled = false
+    shuffleButton.hidden = true
+
+    scene.animateGameOver() {
+      self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "hideGameOver")
+      self.view.addGestureRecognizer(self.tapGestureRecognizer)
     }
-    
-    func updateLabels() {
-        targetLabel.text = NSString(format: "%ld", level.targetScore)
-        movesLabel.text = NSString(format: "%ld", movesLeft)
-        scoreLabel.text = NSString(format: "%ld", score)
-    }
+  }
+
+  func hideGameOver() {
+    view.removeGestureRecognizer(tapGestureRecognizer)
+    tapGestureRecognizer = nil
+
+    gameOverPanel.hidden = true
+    scene.userInteractionEnabled = true
+
+    beginGame()
+  }
+
+  @IBAction func shuffleButtonPressed(AnyObject) {
+    shuffle()
+
+    // Pressing the shuffle button costs a move.
+    decrementMoves()
+  }
 }
